@@ -1,9 +1,10 @@
 <script lang="ts">
 	import OpenAI from 'openai';
 	import { PUBLIC_OPENAI_API_KEY } from '$env/static/public';
+	import type { ChatCompletionMessage } from 'openai/resources/index.mjs';
 
 	let message: string = '';
-	let result: string | null = null;
+	let result: ChatCompletionMessage;
 	let loading: boolean = false;
 
 	const openai = new OpenAI({ apiKey: PUBLIC_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
@@ -18,7 +19,7 @@
 			model: 'gpt-3.5-turbo'
 		});
 
-		result = completion.choices[0].message.content;
+		result = completion.choices[0].message;
 		loading = false;
 		message = '';
 	}
@@ -30,7 +31,7 @@
 			<p>Loading...</p>
 		{/if}
 		{#if result}
-			<p>{result}</p>
+			<p>{result.content}</p>
 		{/if}
 	</div>
 	<div class="flex items-center space-x-2 w-[40%]">
